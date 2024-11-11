@@ -3315,6 +3315,8 @@ __metadata:
     postcss: "npm:^8"
     react: "npm:19.0.0-rc-02c0e824-20241028"
     react-dom: "npm:19.0.0-rc-02c0e824-20241028"
+    react-hook-form: "npm:^7.53.1"
+    return-fetch: "npm:^0.4.6"
     tailwindcss: "npm:^3.4.1"
     typescript: "npm:^5"
   languageName: unknown
@@ -3377,6 +3379,15 @@ __metadata:
   peerDependencies:
     react: 19.0.0-rc-02c0e824-20241028
   checksum: 10c0/3c3d32edaac11ab0811cbd66e32368ddf59a5a35f2704296bda6bffed56845997068edbe3d65840b401e571ee02f4b03b5c1277fa026c9a3778dcc1344be11d7
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.53.1":
+  version: 7.53.1
+  resolution: "react-hook-form@npm:7.53.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/dd2466359a633f873755b366d367d51ab17100566b687fb3b098f704232bc6ab1c79d29f879151e492880ca5eeac35e9425fbe5a309e2a55f7a4b5baf7826e8d
   languageName: node
   linkType: hard
 
@@ -3509,6 +3520,13 @@ __metadata:
   version: 0.12.0
   resolution: "retry@npm:0.12.0"
   checksum: 10c0/59933e8501727ba13ad73ef4a04d5280b3717fd650408460c987392efe9d7be2040778ed8ebe933c5cbd63da3dcc37919c141ef8af0a54a6e4fca5a2af177bfe
+  languageName: node
+  linkType: hard
+
+"return-fetch@npm:^0.4.6":
+  version: 0.4.6
+  resolution: "return-fetch@npm:0.4.6"
+  checksum: 10c0/a22c98e6a1f1080ca2d92eb6567d3d4a86e9c945221c3b6e3b37437dd1366b73294d526844fc8637a06a63d8d614bc5d200937323194b6400568f0765e5cd4fa
   languageName: node
   linkType: hard
 
