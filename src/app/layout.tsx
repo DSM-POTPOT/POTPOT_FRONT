@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 const pretendard = localFont({
   src: "../static/Pretendard.woff2",
@@ -24,7 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" translate="no" className={`${pretendard.variable}`}>
-      <body className={pretendard.className}>{children}</body>
+      <body className={pretendard.className}>
+        <ToastContainer autoClose={2000} />
+        {children}
+      </body>
     </html>
   );
 }

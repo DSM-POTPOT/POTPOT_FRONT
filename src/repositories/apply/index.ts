@@ -1,5 +1,5 @@
-import { mockUpInstance } from "@/api";
-import { allDetailVO, allVO, applyDTO, modifyDTO, myDetailVO, myVO } from "./types";
+import { instance, mockUpInstance } from "@/utils/api";
+import { allDetailVO, allVO, modifyDTO, myDetailVO, myVO } from "./types";
 
 const mockAll: (n: number) => allDetailVO = (n: number) => ({
   id: n,
@@ -17,12 +17,8 @@ const mockApplyAll: allVO = Array.from({ length: 10 }, (_, index) => mockAll(ind
 const mockMyAll: myVO = Array.from({ length: 10 }, (_, index) => mockMy(index));
 
 class apply {
-  public async upload(data: applyDTO) {
-    return await mockUpInstance<null>(null);
-  }
-
-  public async cancel(id: string) {
-    return await mockUpInstance<null>(null);
+  public async apply(id: string | number, type: "APPLY" | "CANCEL") {
+    return await instance(`/apply?feed-id=${id}`, { method: type === "APPLY" ? "POST" : "DELETE" });
   }
 
   public async modify(data: modifyDTO) {
@@ -38,4 +34,6 @@ class apply {
   }
 }
 
-export default new apply();
+const applyCreated = new apply();
+
+export default applyCreated;

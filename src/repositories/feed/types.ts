@@ -1,3 +1,5 @@
+import { commentVO } from "../comment/types";
+
 export type uploadDTO = FormData;
 
 export interface postVO {
@@ -5,7 +7,7 @@ export interface postVO {
   title: string;
   content: string;
   date: string;
-  category: "TAXI" | "POST" | "DELIVERY";
+  category: "TAXI" | "FOOD" | "DELIVERY";
   image: string | null;
   is_ok: boolean;
   user_name: string;
@@ -18,5 +20,5 @@ export interface editDTO {
 export type allVO = Array<postVO>;
 
 export interface detailVO extends postVO {
-  comment_list: Array<{ comment: string }>;
+  comment_list: Array<commentVO>;
 }

@@ -1,44 +1,82 @@
-import { mockUpInstance } from "@/api";
+import { instance, mockUpInstance } from "@/utils/api";
 import { allVO, detailVO, editDTO, postVO, uploadDTO } from "./types";
-
-const mockFeed: (n: number) => postVO = (n: number) => ({
-  user_name: "육기준",
-  title: "배달달",
-  category: "DELIVERY",
-  date: "24.10.22",
-  content: "토요일인데 배달 시킵시다",
-  image: null,
-  is_ok: true,
-  feed_id: n,
-});
-
-const mockFeedAll: allVO = Array.from({ length: 10 }, (_, index) => mockFeed(index));
-
-const mockFeedDetail: detailVO = {
-  ...mockFeed(0),
-  comment_list: [{ comment: "test" }],
-};
+import { server_instance } from "@/utils";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { toast } from "react-toastify";
 
 class feed {
-  public async upload(data: uploadDTO) {
-    return await mockUpInstance<null>(null);
+  public async upload(data: uploadDTO, router: AppRouterInstance) {
+    try {
+      await instance(
+        "/feed",
+        {
+          method: "POST",
+          body: data,
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+        true
+      );
+      router.replace("/main");
+      toast.success("성공적으로 등록되었습니다!");
+    } catch {
+      toast.error("등록 중 오류가 발생했습니다");
+    }
   }
 
-  public async edit(data: editDTO) {
-    return await mockUpInstance<null>(null);
+  public async edit(data: uploadDTO, router: AppRouterInstance, id: string) {
+    try {
+      await instance(
+        `/feed?id=${id}`,
+        {
+          method: "PATCH",
+          body: data,
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+        true
+      );
+      router.replace("/main");
+      toast.success("성공적으로 수정되었습니다!");
+    } catch {
+      toast.error("수정 중 오류가 발생했습니다");
+    }
   }
 
-  public async delete(id: string) {
-    return await mockUpInstance<null>(null);
+  public async delete(id: string, router: AppRouterInstance) {
+    try {
+      instance(`/feed?id=${id}`, { method: "DELETE" }).then(() => {
+        router.replace("/main");
+        toast.success("성공적으로 삭제되었습니다!");
+      });
+    } catch {
+      return;
+    }
   }
 
   public async all() {
-    return await mockUpInstance<allVO>(mockFeedAll);
+    try {
+      return await server_instance<allVO>("/feed/query/all");
+    } catch {
+      return;
+    }
+  }
+
+  public async my() {
+    try {
+      return await server_instance<allVO>("/feed/query/my");
+    } catch {
+      return;
+    }
   }
 
   public async detail(id: string) {
-    return await mockUpInstance<detailVO>(mockFeedDetail);
+    try {
+      return await server_instance<detailVO>(`/comment/${id}`, { cache: "no-store" });
+    } catch {
+      return;
+    }
   }
 }
 
-export default new feed();
+const feedCreated = new feed();
+
+export default feedCreated;

@@ -1,23 +1,27 @@
 "use client";
 import { Button, Input } from "@/components";
 import Link from "next/link";
-import { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { user } from "@/repositories";
+import { loginDTO } from "@/repositories/user/types";
 
 interface IData {
-  schoolNumber: string;
+  school_number: string;
   password: string;
 }
 
 export default function Page() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<IData>();
+    formState: { errors, isValid },
+  } = useForm<IData>({ mode: "onChange" });
 
-  const onSubmit = (d: FieldValues) => {
-    console.log(d);
+  const onSubmit = (data: loginDTO) => {
+    user.login(data, router);
   };
 
   return (
@@ -29,8 +33,8 @@ export default function Page() {
         <Input
           placeholder="학번을 입력하세요"
           label="학번"
-          error={errors.schoolNumber?.message}
-          {...register("schoolNumber", { required: "학번을 입력하세요" })}
+          error={errors.school_number?.message}
+          {...register("school_number", { required: "학번을 입력하세요" })}
         />
         <Input
           placeholder="비밀번호를 입력하세요"
@@ -47,7 +51,7 @@ export default function Page() {
               회원가입
             </Link>
           </span>
-          <Button className="w-fit" type="submit">
+          <Button className="w-fit" type="submit" disabled={!isValid} onClick={() => {}}>
             로그인
           </Button>
         </div>

@@ -2,27 +2,39 @@
 import { Button, Input } from "@/components";
 import Link from "next/link";
 import { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { instance } from "@/utils/api";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { user } from "@/repositories";
+import { signupDTO } from "@/repositories/user/types";
 
 interface IData {
-  schoolNumber: string;
+  school_number: string;
   name: string;
   password: string;
   email: string;
 }
 
+type bodyType = {
+  message: string;
+  status: number;
+};
+
 export default function Page() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     watch,
-  } = useForm<IData>();
-  const [verified, setVerified] = useState(false);
+    getValues,
+  } = useForm<IData>({ mode: "onChange" });
+  const [verified, setVerified] = useState<boolean | string>(false);
   const [verify, setVerify] = useState("");
+  const router = useRouter();
 
-  const onSubmit = (d: FieldValues) => {
-    console.log(d);
+  const onSubmit = (data: signupDTO) => {
+    user.signUp(data, router);
   };
 
   return (
@@ -34,8 +46,8 @@ export default function Page() {
         <Input
           placeholder="학번을 입력하세요"
           label="학번"
-          error={errors.schoolNumber?.message}
-          {...register("schoolNumber", { required: "학번을 입력하세요" })}
+          error={errors.school_number?.message}
+          {...register("school_number", { required: "학번을 입력하세요" })}
         />
         <Input
           placeholder="이름을 입력하세요"
@@ -65,6 +77,11 @@ export default function Page() {
           />
           <Button
             type="button"
+            onClick={() => {
+              instance(`/user/email?email=${getValues("email")}`, { method: "POST" }).then(() => {
+                toast.success("인증번호가 전송되었습니다!");
+              });
+            }}
             disabled={!watch("email") || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(watch("email"))}
           >
             인증 요청
@@ -76,9 +93,28 @@ export default function Page() {
             placeholder="인증번호를 입력하세요"
             label="인증번호"
             value={verify}
+            error={typeof verified === "string" ? verified : undefined}
             onChange={(e) => setVerify(e.target.value)}
           />
-          <Button onClick={() => setVerified(true)} type="button" disabled={!verify}>
+          <Button
+            onClick={async () => {
+              if (getValues("email")) {
+                instance(`/user/email?email=${getValues("email")}&verifyNumber=${verify}`).then(
+                  async (res) => {
+                    console.log(res);
+                    if (res.status === 200) {
+                      setVerified(true);
+                      toast.success("성공적으로 인증되었습니다!");
+                    } else {
+                      setVerified((res.body as bodyType).message);
+                    }
+                  }
+                );
+              }
+            }}
+            type="button"
+            disabled={!verify}
+          >
             확인
           </Button>
         </div>
@@ -90,7 +126,7 @@ export default function Page() {
               로그인
             </Link>
           </span>
-          <Button className="w-fit" type="submit" disabled={!verified}>
+          <Button className="w-fit" type="submit" disabled={verified !== true || !isValid}>
             회원가입
           </Button>
         </div>

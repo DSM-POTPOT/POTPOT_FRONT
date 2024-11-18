@@ -1,7 +1,3 @@
-export interface applyDTO {
-  feed_id: number;
-}
-
 export interface modifyDTO {
   id: number;
   status: boolean;

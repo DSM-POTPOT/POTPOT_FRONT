@@ -1,11 +1,11 @@
 export interface loginDTO {
-  schoolNumber: string;
+  school_number: string;
   password: string;
 }
 
 export interface loginVO {
-  accessToken: string;
-  refreshToken: string;
+  access_token: string;
+  refresh_token: string;
 }
 
 export interface signupDTO extends loginDTO {
@@ -16,14 +16,14 @@ export interface signupDTO extends loginDTO {
 export type fileDTO = FormData;
 
 export interface fileVO {
-  imageURL: string;
+  image_url: string;
 }
 
 export interface userVO {
-  schoolNumber: string;
+  school_number: string;
   name: string;
   email: string;
-  imageUrl: string | null;
+  image_url: string | null;
 }
 
 export interface userDTO {
